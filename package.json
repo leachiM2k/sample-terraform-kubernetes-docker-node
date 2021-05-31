@@ -1,0 +1,16 @@
+{
+  "name": "sample-terraform-kubernetes-docker-node",
+  "version": "1.0.0",
+  "description": "This is an example app",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
