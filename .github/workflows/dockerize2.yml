@@ -17,12 +17,10 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: |
-            docker.pkg.github.com/${{ github.repository }}/all-in-one:${{ github.sha }}
+            docker.pkg.github.com/${{ github.repository }}/all-in-one
           tags: |
             type=raw,value=1.0.${{ github.run_number }},priority=1000
-            type=ref,event=branch
             type=sha
-            type=raw,value=latest
       - name: Log in to GitHub Docker Registry
         uses: docker/login-action@v1
         with:
