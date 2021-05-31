@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       tf_actions_working_dir: ./terraform
+      GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
 
     defaults:
       run:

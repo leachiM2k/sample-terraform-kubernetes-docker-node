@@ -3,16 +3,6 @@ provider "google" {
   region = var.default_region
 }
 
-resource "google_service_account" "k8s_service_account" {
-  account_id   = "k8s-builder"
-  display_name = "Service Account for K8S"
-}
-
-resource "google_project_service" "project" {
-  project = var.project_name
-  service = "container.googleapis.com"
-}
-
 module "service_accounts" {
   source        = "terraform-google-modules/service-accounts/google"
   version       = "~> 3.0"
