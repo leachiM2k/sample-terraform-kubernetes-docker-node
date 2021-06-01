@@ -23,3 +23,9 @@ variable "project_apis" {
   type        = list(string)
   default     = []
 }
+
+variable "example_image" {
+  description = "Image to install in the example application"
+  type        = string
+  default     = "nginx:1.7.8"
+}

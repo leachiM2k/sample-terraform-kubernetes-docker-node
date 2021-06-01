@@ -22,13 +22,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: |
+            docker.pkg.github.com/${{ github.repository }}/all-in-one
+          tags: |
+            type=sha
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
-
-      - name: Terraform fmt
-        id: fmt
-        run: terraform fmt -check
-        continue-on-error: true
 
       - name: Terraform Init
         id: init
@@ -42,6 +46,8 @@ jobs:
         id: plan
         if: github.event_name == 'pull_request'
         run: terraform plan -no-color
+        env:
+          TF_VAR_example_image: docker.pkg.github.com/${{ github.repository }}/all-in-one:${{ steps.meta.outputs.tags[0] }}
         continue-on-error: true
 
       - uses: actions/github-script@0.9.0
@@ -51,8 +57,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            const output = `#### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
             #### Terraform Validation 🤖\`${{ steps.validate.outputs.stdout }}\`
             #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
 
@@ -80,3 +85,5 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve
+        env:
+          TF_VAR_example_image: docker.pkg.github.com/${{ github.repository }}/all-in-one:${{ steps.meta.outputs.tags[0] }}

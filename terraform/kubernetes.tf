@@ -1,6 +1,6 @@
 provider "kubernetes" {
-  host = "https://${google_container_cluster.test-cluster.endpoint}"
-  token = data.google_service_account_access_token.my_kubernetes_sa.access_token
+  host                   = "https://${google_container_cluster.test-cluster.endpoint}"
+  token                  = data.google_service_account_access_token.my_kubernetes_sa.access_token
   cluster_ca_certificate = base64decode(google_container_cluster.test-cluster.master_auth[0].cluster_ca_certificate)
 }
 
@@ -33,8 +33,8 @@ resource "kubernetes_deployment" "nginx" {
       }
       spec {
         container {
-          image = "nginx:1.7.8"
-          name = "example"
+          image = var.example_image
+          name  = "example"
 
           port {
             container_port = 80
@@ -42,11 +42,11 @@ resource "kubernetes_deployment" "nginx" {
 
           resources {
             limits = {
-              cpu = "100m"
+              cpu    = "100m"
               memory = "512Mi"
             }
             requests = {
-              cpu = "100m"
+              cpu    = "100m"
               memory = "50Mi"
             }
           }
@@ -65,9 +65,9 @@ resource "kubernetes_service" "nginx" {
       App = kubernetes_deployment.nginx.spec.0.template.0.metadata[0].labels.App
     }
     port {
-      port = 80
+      port        = 80
       target_port = 80
-      protocol = "TCP"
+      protocol    = "TCP"
     }
 
     type = "NodePort"
@@ -80,7 +80,7 @@ resource "kubernetes_ingress" "nginx_ingress" {
     name = "nginx-ingress"
     annotations = {
       "cloud.google.com/load-balancer-type" = "External",
-      "kubernetes.io/ingress.class" = "gce",
+      "kubernetes.io/ingress.class"         = "gce",
     }
   }
   spec {
