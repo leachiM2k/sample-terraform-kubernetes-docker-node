@@ -17,3 +17,9 @@ variable "default_region" {
   description = "Default region to create resources where applicable."
   type        = string
 }
+
+variable "project_apis" {
+  description = "APIs to enable in the project"
+  type        = list(string)
+  default     = []
+}

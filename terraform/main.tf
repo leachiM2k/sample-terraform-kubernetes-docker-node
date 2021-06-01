@@ -3,6 +3,12 @@ provider "google" {
   region = var.default_region
 }
 
+resource "google_project_service" "project" {
+  for_each = toset(var.project_apis)
+  project = var.project_name
+  service = each.value
+}
+
 module "service_accounts" {
   source = "terraform-google-modules/service-accounts/google"
   version = "~> 3.0"
