@@ -34,7 +34,7 @@ resource "kubernetes_deployment" "nginx" {
       spec {
         container {
           image = "nginx:1.7.8"
-          name  = "example"
+          name = "example"
 
           port {
             container_port = 80
@@ -42,11 +42,11 @@ resource "kubernetes_deployment" "nginx" {
 
           resources {
             limits = {
-              cpu    = "0.5"
+              cpu = "100m"
               memory = "512Mi"
             }
             requests = {
-              cpu    = "250m"
+              cpu = "100m"
               memory = "50Mi"
             }
           }
@@ -65,11 +65,35 @@ resource "kubernetes_service" "nginx" {
       App = kubernetes_deployment.nginx.spec.0.template.0.metadata[0].labels.App
     }
     port {
-      node_port   = 30201
-      port        = 80
+      port = 80
       target_port = 80
+      protocol = "TCP"
     }
 
     type = "NodePort"
+  }
+}
+
+resource "kubernetes_ingress" "nginx_ingress" {
+  wait_for_load_balancer = true
+  metadata {
+    name = "nginx-ingress"
+    annotations = {
+      "cloud.google.com/load-balancer-type" = "External",
+      "kubernetes.io/ingress.class" = "gce",
+    }
+  }
+  spec {
+    rule {
+      http {
+        path {
+          path = "/*"
+          backend {
+            service_name = kubernetes_service.nginx.metadata.0.name
+            service_port = 80
+          }
+        }
+      }
+    }
   }
 }

@@ -10,6 +10,9 @@ resource "google_project_service" "project" {
 }
 
 module "service_accounts" {
+  depends_on = [
+    google_project_service.project
+  ]
   source = "terraform-google-modules/service-accounts/google"
   version = "~> 3.0"
   project_id = var.project_name
@@ -19,11 +22,15 @@ module "service_accounts" {
   project_roles = [
     "${var.project_name}=>roles/container.clusterAdmin",
     "${var.project_name}=>roles/container.developer",
-    "${var.project_name}=>roles/iam.serviceAccountUser",
+    "${var.project_name}=>roles/compute.instanceAdmin",
   ]
 }
 
 resource "google_container_cluster" "test-cluster" {
+  depends_on = [
+    google_project_service.project,
+    module.service_accounts,
+  ]
   name = "test-cluster"
   location = "${var.default_region}-c"
   initial_node_count = 1
