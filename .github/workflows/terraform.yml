@@ -13,7 +13,6 @@ jobs:
     env:
       tf_actions_working_dir: ./terraform
       GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-      TF_VAR_example_image: docker.pkg.github.com/${{ github.repository }}/all-in-one:${{ github.sha }}
 
     defaults:
       run:
@@ -22,6 +21,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - id: read-docker-image-identifiers
+        name: Read Docker Image Identifiers
+        run: echo TF_VAR_example_image=$(echo ${{ github.repository }}/all-in-one:${{ github.sha }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
