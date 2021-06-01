@@ -20,7 +20,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - id: read-docker-image-identifiers
         name: Read Docker Image Identifiers
-        run: echo IMAGE_REPOSITORY=$(echo ${{ github.repository }}/all-in-one:${{ github.sha }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
+        run: echo IMAGE_REPOSITORY=$(echo docker.pkg.github.com/${{ github.repository }}/all-in-one:${{ github.sha }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
       - name: Build container image
         uses: docker/build-push-action@v2
         with:

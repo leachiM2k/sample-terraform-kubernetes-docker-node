@@ -24,7 +24,7 @@ jobs:
 
       - id: read-docker-image-identifiers
         name: Read Docker Image Identifiers
-        run: echo TF_VAR_example_image=$(echo ${{ github.repository }}/all-in-one:${{ github.sha }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
+        run: echo TF_VAR_example_image=$(echo docker.pkg.github.com/${{ github.repository }}/all-in-one:${{ github.sha }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
