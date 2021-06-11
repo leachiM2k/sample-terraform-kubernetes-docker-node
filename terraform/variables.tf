@@ -27,5 +27,5 @@ variable "project_apis" {
 variable "example_image" {
   description = "Image to install in the example application"
   type        = string
-  default     = "nginx:1.7.8"
+  default     = "strm/helloworld-http:latest"
 }
